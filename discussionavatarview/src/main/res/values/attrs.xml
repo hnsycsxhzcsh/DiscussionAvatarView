@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DiscussionAvatarView">
+        <!--头像的半径-->
+        <attr name="radius" format="reference|float" />
+        <!--头像间的距离-->
+        <attr name="space" format="reference|float" />
+    </declare-styleable>
+
+</resources>
