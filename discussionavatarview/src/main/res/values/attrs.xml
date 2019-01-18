@@ -6,6 +6,8 @@
         <attr name="radius" format="reference|float" />
         <!--头像间的距离-->
         <attr name="space" format="reference|float" />
+        <!--是否是循环添加-->
+        <attr name="isCycle" format="reference|boolean" />
     </declare-styleable>
 
 </resources>
