@@ -1,0 +1,2 @@
+# DiscussionAvatarView
+Android自定义控件DiscussionAvatarView，显示多个参与讨论的人的头像
