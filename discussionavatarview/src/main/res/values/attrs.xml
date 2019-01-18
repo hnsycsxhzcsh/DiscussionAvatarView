@@ -2,10 +2,10 @@
 <resources>
 
     <declare-styleable name="DiscussionAvatarView">
-        <!--头像的半径-->
-        <attr name="radius" format="reference|float" />
-        <!--头像间的距离-->
-        <attr name="space" format="reference|float" />
+        <!--头像的半径,dp为单位-->
+        <attr name="radius" format="reference|integer" />
+        <!--头像间的距离，dp为单位-->
+        <attr name="space" format="reference|integer" />
         <!--是否是循环添加-->
         <attr name="isCycle" format="reference|boolean" />
     </declare-styleable>

@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DiscussionAvatarView.iml" filepath="$PROJECT_DIR$/DiscussionAvatarView.iml" />
+      <module fileurl="file://E:\git\DiscussionAvatarView\DiscussionAvatarView.iml" filepath="E:\git\DiscussionAvatarView\DiscussionAvatarView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\git\DiscussionAvatarView\app\app.iml" filepath="E:\git\DiscussionAvatarView\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/discussionavatarview/discussionavatarview.iml" filepath="$PROJECT_DIR$/discussionavatarview/discussionavatarview.iml" />
+      <module fileurl="file://E:\git\DiscussionAvatarView\discussionavatarview\discussionavatarview.iml" filepath="E:\git\DiscussionAvatarView\discussionavatarview\discussionavatarview.iml" />
     </modules>
   </component>
 </project>
