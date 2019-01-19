@@ -6,8 +6,10 @@
         <attr name="radius" format="reference|integer" />
         <!--头像间的距离，dp为单位-->
         <attr name="space" format="reference|integer" />
-        <!--是否是循环添加-->
-        <attr name="isCycle" format="reference|boolean" />
+        <!--最多显示多少个头像-->
+        <attr name="maxCount" format="reference|integer" />
+        <!--是否最后一个显示完全,默认是true-->
+        <attr name="isLastComplete" format="reference|boolean" />
     </declare-styleable>
 
 </resources>

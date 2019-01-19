@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  * Created by HARRY on 2019/1/18 0018.
  */
 
-public class DiscussionAvatarView extends RelativeLayout {
+public class DiscussionAvatarView extends ViewGroup {
     private ArrayList<String> mDatas = new ArrayList<>();
     private ArrayList<ImageView> mAvaLists = new ArrayList<>();
     private float mRadius;
@@ -22,6 +23,8 @@ public class DiscussionAvatarView extends RelativeLayout {
     private float mSpace;
     private Context mContext;
     private LayoutInflater mInflater;
+    private boolean isLastComplete;
+    private int mMaxCount;
 
     public DiscussionAvatarView(Context context) {
         this(context, null);
@@ -43,12 +46,14 @@ public class DiscussionAvatarView extends RelativeLayout {
         if (array != null) {
             int radius = array.getInteger(R.styleable.DiscussionAvatarView_radius, 10);
             int space = array.getInteger(R.styleable.DiscussionAvatarView_space, -10);
+            mMaxCount = array.getInteger(R.styleable.DiscussionAvatarView_maxCount, 6);
+            isLastComplete = array.getBoolean(R.styleable.DiscussionAvatarView_isLastComplete, true);
 
             mRadius = DensityUtil.dip2px(context, radius);
             mSpace = DensityUtil.dip2px(context, space);
 
-            mRadius = 6 * mRadius;
-            mSpace = 6 * mSpace;
+            mRadius = 4 * mRadius;
+            mSpace = 4 * mSpace;
             mDiameter = 2 * mRadius;
             array.recycle();
         }
@@ -63,41 +68,90 @@ public class DiscussionAvatarView extends RelativeLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int wid = 0;
-        if (mAvaLists.size() > 0) {
-            wid = (int) (2 * mRadius + (mAvaLists.size() - 1) * mRadius);
-        }
-        int hei = MeasureSpec.getSize(heightMeasureSpec);
+        int heiMeasure = MeasureSpec.getSize(heightMeasureSpec);
+        int heiMode = MeasureSpec.getMode(heightMeasureSpec);
         int widMode = MeasureSpec.getMode(widthMeasureSpec);
-        if (widMode != MeasureSpec.EXACTLY) {
-            setMeasuredDimension(wid, hei);
+        int wieMeasure = MeasureSpec.getSize(heightMeasureSpec);
+
+        int wid = 0;
+        int hei = 0;
+        int count = getChildCount();
+
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            // 测量子View的宽和高,系统提供的measureChild
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            // 得到LayoutParams
+            LayoutParams lp = child.getLayoutParams();
+            // 子View占据的宽度
+            int childWidth = child.getMeasuredWidth();
+            // 子View占据的高度
+            int childHeight = child.getMeasuredHeight();
+
+            if (i == 0) {
+                wid = wid + childWidth;
+            } else {
+                wid = wid + childWidth / 2;
+            }
+            hei = Math.max(hei, childHeight);
         }
+        setMeasuredDimension((widMode == MeasureSpec.EXACTLY) ? wieMeasure : wid,
+                (heiMode == MeasureSpec.EXACTLY) ? heiMeasure : hei);
         System.out.println("wid:" + wid + ",hei:" + hei);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//        TODO https://blog.csdn.net/zuo_er_lyf/article/details/81629384
-        super.onLayout(changed, l, t, r, b);
         System.out.println("changed:" + changed + ",l:" + l + ",t:" + t + ",r:" + r + ",b:" + b);
-        removeAllViews();
-        for (int i = 0; i < mAvaLists.size(); i++) {
-            ImageView iv = mAvaLists.get(i);
-            addView(iv, (int) (2 * mRadius), (int) (2 * mRadius));
-//            RelativeLayout.LayoutParams st =
-//                    (RelativeLayout.LayoutParams) iv.getLayoutParams();
-//            iv.layout((int)(st.width + mSpace * i), t, (int) (st.width * (i + 1) + mSpace * i), st.width);
-            iv.layout((int) (l + 2 * mRadius * i + mSpace * i), t, (int) (l + (2 * mRadius * (i + 1) + mSpace * i)), (int) (2 * mRadius));
+        int count = getChildCount();
+
+        int left = 0;
+        int top = 0;
+        int right = 0;
+        for (int i = 0; i < count; i++) {
+            View child;
+            if (isLastComplete) {
+                child = getChildAt(i);
+            } else {
+                child = getChildAt(count - i - 1);
+            }
+            LayoutParams lp = child.getLayoutParams();
+            int childWidth = child.getMeasuredWidth();
+            int childHeight = child.getMeasuredHeight();
+
+            if (i == 0) {
+                right = right + childWidth;
+            } else {
+                right = right + childWidth / 2;
+            }
+
+            child.layout(left, top, right, childHeight);
+            left = left + childWidth / 2;
         }
     }
 
     public void setDatas(ArrayList<String> list) {
+        removeAllViews();
         mDatas.clear();
         mDatas.addAll(list);
-        for (int i = 0; i < mDatas.size(); i++) {
-            ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, null, true);
-            GlideUtil.loadCircleImageView(mContext, mDatas.get(i), iv);
+        mAvaLists.clear();
+        int size = mDatas.size();
+        for (int i = 0; i < size; i++) {
+            ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
+
+            ViewGroup.LayoutParams lp = iv.getLayoutParams();
+            lp.width = (int) (2 * mRadius);
+            lp.height = lp.width;
+            iv.setLayoutParams(lp);
+
+            if (isLastComplete) {
+                GlideUtil.loadCircleImageView(mContext, mDatas.get(i), iv);
+            } else {
+                GlideUtil.loadCircleImageView(mContext, mDatas.get(size - i - 1), iv);
+            }
+
             mAvaLists.add(iv);
+            this.addView(iv);
         }
         invalidate();
     }
