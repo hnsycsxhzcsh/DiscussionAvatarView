@@ -1,7 +1,11 @@
 package com.discussionavatarview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +20,7 @@ import java.util.ArrayList;
  */
 
 public class DiscussionAvatarView extends ViewGroup {
-    private ArrayList<String> mDatas = new ArrayList<>();
-    private ArrayList<ImageView> mAvaLists = new ArrayList<>();
+    //    private ArrayList<String> mDatas = new ArrayList<>();
     private float mRadius;
     private float mDiameter;
     private float mSpace;
@@ -25,6 +28,9 @@ public class DiscussionAvatarView extends ViewGroup {
     private LayoutInflater mInflater;
     private boolean isLastComplete;
     private int mMaxCount;
+    private int mCurrentOffset;
+    private boolean isAddView;
+    private ValueAnimator animator;
 
     public DiscussionAvatarView(Context context) {
         this(context, null);
@@ -76,7 +82,6 @@ public class DiscussionAvatarView extends ViewGroup {
         int wid = 0;
         int hei = 0;
         int count = getChildCount();
-
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             // 测量子View的宽和高,系统提供的measureChild
@@ -88,10 +93,12 @@ public class DiscussionAvatarView extends ViewGroup {
             // 子View占据的高度
             int childHeight = child.getMeasuredHeight();
 
-            if (i == 0) {
-                wid = wid + childWidth;
-            } else {
-                wid = wid + childWidth / 2;
+            if (i < mMaxCount) {
+                if (i == 0) {
+                    wid = wid + childWidth;
+                } else {
+                    wid = wid + childWidth / 2;
+                }
             }
             hei = Math.max(hei, childHeight);
         }
@@ -105,9 +112,9 @@ public class DiscussionAvatarView extends ViewGroup {
         System.out.println("changed:" + changed + ",l:" + l + ",t:" + t + ",r:" + r + ",b:" + b);
         int count = getChildCount();
 
-        int left = 0;
+        int left = -mCurrentOffset;
         int top = 0;
-        int right = 0;
+        int right = -mCurrentOffset;
         for (int i = 0; i < count; i++) {
             View child;
             if (isLastComplete) {
@@ -115,7 +122,6 @@ public class DiscussionAvatarView extends ViewGroup {
             } else {
                 child = getChildAt(count - i - 1);
             }
-            LayoutParams lp = child.getLayoutParams();
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
 
@@ -124,18 +130,24 @@ public class DiscussionAvatarView extends ViewGroup {
             } else {
                 right = right + childWidth / 2;
             }
-
             child.layout(left, top, right, childHeight);
             left = left + childWidth / 2;
         }
+
     }
 
-    public void setDatas(ArrayList<String> list) {
+    /**
+     * 初始化数据
+     *
+     * @param list
+     */
+    public void initDatas(ArrayList<String> list) {
+        if (list == null) {
+            return;
+        }
         removeAllViews();
-        mDatas.clear();
-        mDatas.addAll(list);
-        mAvaLists.clear();
-        int size = mDatas.size();
+        int size = list.size();
+        mMaxCount = size;
         for (int i = 0; i < size; i++) {
             ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
 
@@ -145,22 +157,107 @@ public class DiscussionAvatarView extends ViewGroup {
             iv.setLayoutParams(lp);
 
             if (isLastComplete) {
-                GlideUtil.loadCircleImageView(mContext, mDatas.get(i), iv);
+                GlideUtil.loadCircleImageView(mContext, list.get(i), iv);
             } else {
-                GlideUtil.loadCircleImageView(mContext, mDatas.get(size - i - 1), iv);
+                GlideUtil.loadCircleImageView(mContext, list.get(size - i - 1), iv);
             }
 
-            mAvaLists.add(iv);
             this.addView(iv);
         }
         invalidate();
     }
 
+    /**
+     * 添加一个头像
+     *
+     * @param ava
+     */
     public void addData(String ava) {
-        mDatas.add(ava);
-        ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, true);
+        if (mMaxCount <= 0) {
+            return;
+        }
+        if (TextUtils.isEmpty(ava)) {
+            return;
+        }
+
+        if (animator != null) {
+            animator.cancel();
+        }
+        int childCount = getChildCount();
+        ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
+        ViewGroup.LayoutParams lp = iv.getLayoutParams();
+        lp.width = (int) (2 * mRadius);
+        lp.height = lp.width;
+        iv.setLayoutParams(lp);
         GlideUtil.loadCircleImageView(mContext, ava, iv);
-        mAvaLists.add(iv);
-        invalidate();
+        if (isLastComplete) {
+            this.addView(iv);
+        } else {
+            this.addView(iv, 0);
+        }
+
+        if (childCount >= mMaxCount) {
+            int countAft = getChildCount();
+            View child;
+            if (isLastComplete) {
+                child = getChildAt(0);
+            } else {
+                child = getChildAt(countAft - 1);
+            }
+            int childWid = child.getMeasuredWidth();
+            animator = ValueAnimator.ofInt(0, childWid / 2);
+            animator.setDuration(1000);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mCurrentOffset = (int) animation.getAnimatedValue();
+                    System.out.println("mCurrentOffset:" + mCurrentOffset);
+                    requestLayout();
+                }
+            });
+
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mCurrentOffset = 0;
+                    if (isLastComplete) {
+                        removeViewAt(0);
+                    } else {
+                        int count = getChildCount();
+                        removeViewAt(count - 1);
+                    }
+                }
+
+            });
+            animator.start();
+        } else {
+            invalidate();
+        }
+    }
+
+    /**
+     * 设置最大头像数
+     *
+     * @param count
+     */
+    public void setMaxCount(int count) {
+        this.mMaxCount = count;
+        int childCount = getChildCount();
+        if (childCount > mMaxCount) {
+            for (int i = 0; i < childCount - mMaxCount; i++) {
+                if (isLastComplete) {
+                    removeViewAt(0);
+                } else {
+                    int currentCount = getChildCount();
+                    removeViewAt(currentCount - 1);
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.discussionavatarview.DiscussionAvatarView;
 
@@ -16,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private DiscussionAvatarView mDiscussAva;
     private Button mBtAdd;
     private LayoutInflater mInflater;
+    private Button mBtReset;
+    private Button mBtAdd2;
+    private Button mBtMaxCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +25,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mDiscussAva = (DiscussionAvatarView) findViewById(R.id.daview);
         mBtAdd = (Button) findViewById(R.id.bt_add);
+        mBtAdd2 = (Button) findViewById(R.id.bt_add2);
+        mBtReset = (Button) findViewById(R.id.bt_reset);
+        mBtMaxCount = (Button) findViewById(R.id.bt_max_count);
 
         mInflater = LayoutInflater.from(this);
 
         setDatas();
-        mDiscussAva.setDatas(mDatas);
+//        mDiscussAva.initDatas(mDatas);
 
-//        for (int i = 0; i < mDatas.size(); i++) {
-//            ImageView view = (ImageView) mInflater.inflate(R.layout.avatar, mDiscussAva, false);
-//            mDiscussAva.addView(view);
-//        }
+        mBtReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDiscussAva.initDatas(mDatas);
+            }
+        });
 
+        mBtAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://b-ssl.duitang.com/uploads/item/201807/11/20180711091152_FakCJ.thumb.700_0.jpeg";
+                mDiscussAva.addData(url);
+            }
+        });
+
+        mBtAdd2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://b-ssl.duitang.com/uploads/item/201811/01/20181101093301_u2NKu.thumb.700_0.jpeg";
+                mDiscussAva.addData(url);
+            }
+        });
+
+        mBtMaxCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDiscussAva.setMaxCount(4);
+            }
+        });
     }
 
     private void setDatas() {

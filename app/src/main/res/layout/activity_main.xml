@@ -11,13 +11,43 @@
         android:id="@+id/daview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:isLastComplete="true">
+        app:isLastComplete="true"
+        app:maxCount="6"
+        app:radius="10"
+        app:space="10">
 
     </com.discussionavatarview.DiscussionAvatarView>
 
-    <Button
-        android:id="@+id/bt_add"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="添加头像" />
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/bt_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重置" />
+
+        <Button
+            android:id="@+id/bt_max_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置最大头像数为4" />
+
+        <Button
+            android:id="@+id/bt_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加头像1" />
+
+        <Button
+            android:id="@+id/bt_add2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加头像1" />
+
+    </LinearLayout>
+
 </LinearLayout>
