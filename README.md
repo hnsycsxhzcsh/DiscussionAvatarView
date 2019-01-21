@@ -67,3 +67,5 @@ dependencies {
 ```
 If my control helps you, please help click on the top right corner, thank you!</br>
 ### <font color="#FF0000">如果有帮助到大家希望点下右上角Star，谢谢！</font>
+
+[![](https://www.jitpack.io/v/hnsycsxhzcsh/DiscussionAvatarView.svg)](https://www.jitpack.io/#hnsycsxhzcsh/DiscussionAvatarView)
