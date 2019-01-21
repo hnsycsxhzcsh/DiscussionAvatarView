@@ -73,6 +73,6 @@ Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener
             }
         });
 
-If you are helpful, everyone wants to click on the upper right corner of Star, thank you!
+If my control helps you, please help click on the top right corner, thank you!
 
 <font color="#FF0000">如果有帮助到大家希望点下右上角Star，谢谢！</font>
