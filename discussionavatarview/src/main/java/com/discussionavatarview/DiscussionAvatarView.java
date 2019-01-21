@@ -20,17 +20,40 @@ import java.util.ArrayList;
  */
 
 public class DiscussionAvatarView extends ViewGroup {
-    //    private ArrayList<String> mDatas = new ArrayList<>();
-    private float mRadius;
-    private float mDiameter;
+    /**
+     * 头像的半径
+     */
+    private int mRadius;
+    /**
+     * 头像间的距离
+     */
     private float mSpace;
     private Context mContext;
     private LayoutInflater mInflater;
+    /**
+     * 是否最后一个显示完全
+     */
     private boolean isLastComplete;
+    /**
+     * 最大头像数目
+     */
     private int mMaxCount;
+    /**
+     * 当前移动的偏移量
+     */
     private int mCurrentOffset;
-    private boolean isAddView;
+    /**
+     * 移动的属性动画
+     */
     private ValueAnimator animator;
+    /**
+     * 是否显示动画效果
+     */
+    private boolean isShowAnimation;
+    /**
+     * 监听
+     */
+    private DiscussionAvatarListener listener;
 
     public DiscussionAvatarView(Context context) {
         this(context, null);
@@ -50,25 +73,16 @@ public class DiscussionAvatarView extends ViewGroup {
         this.mInflater = LayoutInflater.from(mContext);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.DiscussionAvatarView);
         if (array != null) {
-            int radius = array.getInteger(R.styleable.DiscussionAvatarView_radius, 10);
-            int space = array.getInteger(R.styleable.DiscussionAvatarView_space, -10);
+            int radius = array.getInteger(R.styleable.DiscussionAvatarView_radius, 13);
+            mSpace = array.getFloat(R.styleable.DiscussionAvatarView_space, (float) 0.5);
             mMaxCount = array.getInteger(R.styleable.DiscussionAvatarView_maxCount, 6);
             isLastComplete = array.getBoolean(R.styleable.DiscussionAvatarView_isLastComplete, true);
+            isShowAnimation = array.getBoolean(R.styleable.DiscussionAvatarView_isShowAnimation, true);
 
             mRadius = DensityUtil.dip2px(context, radius);
-            mSpace = DensityUtil.dip2px(context, space);
 
-            mRadius = 4 * mRadius;
-            mSpace = 4 * mSpace;
-            mDiameter = 2 * mRadius;
             array.recycle();
         }
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
     }
 
     @Override
@@ -84,10 +98,12 @@ public class DiscussionAvatarView extends ViewGroup {
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
+            ViewGroup.LayoutParams lp = child.getLayoutParams();
+            lp.width = 2 * mRadius;
+            lp.height = lp.width;
+            child.setLayoutParams(lp);
             // 测量子View的宽和高,系统提供的measureChild
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            // 得到LayoutParams
-            LayoutParams lp = child.getLayoutParams();
             // 子View占据的宽度
             int childWidth = child.getMeasuredWidth();
             // 子View占据的高度
@@ -97,19 +113,17 @@ public class DiscussionAvatarView extends ViewGroup {
                 if (i == 0) {
                     wid = wid + childWidth;
                 } else {
-                    wid = wid + childWidth / 2;
+                    wid = (int) (wid + childWidth * mSpace);
                 }
             }
             hei = Math.max(hei, childHeight);
         }
         setMeasuredDimension((widMode == MeasureSpec.EXACTLY) ? wieMeasure : wid,
                 (heiMode == MeasureSpec.EXACTLY) ? heiMeasure : hei);
-        System.out.println("wid:" + wid + ",hei:" + hei);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        System.out.println("changed:" + changed + ",l:" + l + ",t:" + t + ",r:" + r + ",b:" + b);
         int count = getChildCount();
 
         int left = -mCurrentOffset;
@@ -128,12 +142,11 @@ public class DiscussionAvatarView extends ViewGroup {
             if (i == 0) {
                 right = right + childWidth;
             } else {
-                right = right + childWidth / 2;
+                right = (int) (right + childWidth * mSpace);
             }
             child.layout(left, top, right, childHeight);
-            left = left + childWidth / 2;
+            left = (int) (left + childWidth * mSpace);
         }
-
     }
 
     /**
@@ -150,12 +163,6 @@ public class DiscussionAvatarView extends ViewGroup {
         mMaxCount = size;
         for (int i = 0; i < size; i++) {
             ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
-
-            ViewGroup.LayoutParams lp = iv.getLayoutParams();
-            lp.width = (int) (2 * mRadius);
-            lp.height = lp.width;
-            iv.setLayoutParams(lp);
-
             if (isLastComplete) {
                 GlideUtil.loadCircleImageView(mContext, list.get(i), iv);
             } else {
@@ -164,31 +171,35 @@ public class DiscussionAvatarView extends ViewGroup {
 
             this.addView(iv);
         }
-        invalidate();
     }
 
     /**
-     * 添加一个头像
+     * 添加头像，没有动画监听
      *
      * @param ava
      */
     public void addData(String ava) {
+        addData(ava, null);
+    }
+
+    /**
+     * 添加一个头像，有动画监听
+     *
+     * @param ava
+     */
+    public void addData(String ava, DiscussionAvatarListener listener1) {
+        this.listener = listener1;
         if (mMaxCount <= 0) {
             return;
         }
         if (TextUtils.isEmpty(ava)) {
             return;
         }
-
         if (animator != null) {
             animator.cancel();
         }
         int childCount = getChildCount();
-        ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
-        ViewGroup.LayoutParams lp = iv.getLayoutParams();
-        lp.width = (int) (2 * mRadius);
-        lp.height = lp.width;
-        iv.setLayoutParams(lp);
+        final ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
         GlideUtil.loadCircleImageView(mContext, ava, iv);
         if (isLastComplete) {
             this.addView(iv);
@@ -197,47 +208,70 @@ public class DiscussionAvatarView extends ViewGroup {
         }
 
         if (childCount >= mMaxCount) {
-            int countAft = getChildCount();
-            View child;
-            if (isLastComplete) {
-                child = getChildAt(0);
-            } else {
-                child = getChildAt(countAft - 1);
-            }
-            int childWid = child.getMeasuredWidth();
-            animator = ValueAnimator.ofInt(0, childWid / 2);
-            animator.setDuration(1000);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mCurrentOffset = (int) animation.getAnimatedValue();
-                    System.out.println("mCurrentOffset:" + mCurrentOffset);
-                    requestLayout();
+            if (isShowAnimation) {
+                int countAft = getChildCount();
+                final View child;
+                if (isLastComplete) {
+                    child = getChildAt(0);
+                } else {
+                    child = getChildAt(countAft - 1);
                 }
-            });
-
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mCurrentOffset = 0;
-                    if (isLastComplete) {
-                        removeViewAt(0);
-                    } else {
-                        int count = getChildCount();
-                        removeViewAt(count - 1);
+                int childWid = child.getMeasuredWidth();
+                animator = ValueAnimator.ofInt(0, (int) (childWid * mSpace));
+                animator.setDuration(1000);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        mCurrentOffset = (int) animation.getAnimatedValue();
+                        //使左侧渐变消失，右侧渐变显示
+                        long duration = animation.getDuration();
+                        long currentPlayTime = animation.getCurrentPlayTime();
+                        float v = (float) currentPlayTime / duration;
+                        iv.setAlpha(v);
+                        child.setAlpha(1 - v);
+                        requestLayout();
                     }
-                }
+                });
 
-            });
-            animator.start();
-        } else {
-            invalidate();
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        if (listener != null) {
+                            listener.onAnimationStart();
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mCurrentOffset = 0;
+                        int count = getChildCount();
+                        for (int i = 0; i < count; i++) {
+                            View child = getChildAt(i);
+                            child.setAlpha(1);
+                        }
+                        if (isLastComplete) {
+                            removeViewAt(0);
+                        } else {
+                            removeViewAt(count - 1);
+                        }
+                        if (listener != null) {
+                            listener.onAnimationEnd();
+                        }
+                    }
+
+                });
+                animator.start();
+            } else {
+                mCurrentOffset = 0;
+                if (isLastComplete) {
+                    removeViewAt(0);
+                } else {
+                    int count = getChildCount();
+                    removeViewAt(count - 1);
+                }
+            }
         }
     }
 
@@ -260,4 +294,5 @@ public class DiscussionAvatarView extends ViewGroup {
             }
         }
     }
+
 }

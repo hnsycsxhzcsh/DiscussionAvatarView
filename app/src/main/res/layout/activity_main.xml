@@ -11,10 +11,12 @@
         android:id="@+id/daview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         app:isLastComplete="true"
+        app:isShowAnimation="true"
         app:maxCount="6"
-        app:radius="10"
-        app:space="10">
+        app:radius="30"
+        app:space="0.5">
 
     </com.discussionavatarview.DiscussionAvatarView>
 
@@ -28,7 +30,7 @@
             android:id="@+id/bt_reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="重置" />
+            android:text="初始化数据" />
 
         <Button
             android:id="@+id/bt_max_count"

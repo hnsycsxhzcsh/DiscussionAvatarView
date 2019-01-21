@@ -2,10 +2,10 @@ package com.discussionavatar;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.discussionavatarview.DiscussionAvatarListener;
 import com.discussionavatarview.DiscussionAvatarView;
 
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDatas = new ArrayList<>();
     private DiscussionAvatarView mDiscussAva;
     private Button mBtAdd;
-    private LayoutInflater mInflater;
     private Button mBtReset;
     private Button mBtAdd2;
     private Button mBtMaxCount;
@@ -29,10 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mBtReset = (Button) findViewById(R.id.bt_reset);
         mBtMaxCount = (Button) findViewById(R.id.bt_max_count);
 
-        mInflater = LayoutInflater.from(this);
-
-        setDatas();
-//        mDiscussAva.initDatas(mDatas);
+        initTestDatas();
 
         mBtReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +41,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = "https://b-ssl.duitang.com/uploads/item/201807/11/20180711091152_FakCJ.thumb.700_0.jpeg";
-                mDiscussAva.addData(url);
+                mDiscussAva.addData(url, new DiscussionAvatarListener() {
+                    @Override
+                    public void onAnimationStart() {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd() {
+
+                    }
+                });
             }
         });
 
@@ -63,9 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 mDiscussAva.setMaxCount(4);
             }
         });
+
     }
 
-    private void setDatas() {
+    private void initTestDatas() {
         mDatas.add("https://b-ssl.duitang.com/uploads/item/201811/04/20181104223950_vygmz.thumb.700_0.jpeg");
         mDatas.add("https://b-ssl.duitang.com/uploads/item/201807/11/20180711091152_FakCJ.thumb.700_0.jpeg");
         mDatas.add("https://b-ssl.duitang.com/uploads/item/201811/04/20181104223952_zfhli.thumb.700_0.jpeg");

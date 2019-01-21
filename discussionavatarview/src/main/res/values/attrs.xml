@@ -4,12 +4,15 @@
     <declare-styleable name="DiscussionAvatarView">
         <!--头像的半径,dp为单位-->
         <attr name="radius" format="reference|integer" />
-        <!--头像间的距离，dp为单位-->
-        <attr name="space" format="reference|integer" />
+        <!--头像间的距离，为头像直径的长度的百分比，dp为单位-->
+        <attr name="space" format="reference|float" />
         <!--最多显示多少个头像-->
         <attr name="maxCount" format="reference|integer" />
         <!--是否最后一个显示完全,默认是true-->
         <attr name="isLastComplete" format="reference|boolean" />
+        <!--是否显示动画效果-->
+        <attr name="isShowAnimation" format="reference|boolean" />
+
     </declare-styleable>
 
 </resources>
