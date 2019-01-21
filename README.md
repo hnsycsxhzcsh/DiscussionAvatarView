@@ -12,8 +12,8 @@ Rendering</br>
 The method referenced in the project:</br>
 项目中引用的方法：
 
-Step 1. Add the JitPack repository to your build file</br>
-步骤1.将JitPack存储库添加到构建文件中</br>
+##### Step 1. Add the JitPack repository to your build file</br>
+##### 步骤1.将JitPack存储库添加到构建文件中</br>
 项目的根build.gradle中添加以下代码：
 
 	allprojects {
