@@ -32,7 +32,7 @@ The method referenced in the project:</br>
 
 #### Step 3. Reference control in layout</br>
 步骤3. 布局中引用控件
-
+```
     <com.discussionavatarview.DiscussionAvatarView
         android:id="@+id/daview"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@ The method referenced in the project:</br>
         app:maxCount="6"
         app:radius="30"
         app:space="0.5">
-
+```
 #### Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener (can be omitted) as an animation effect monitor.</br>
 步骤4. 新增头像使用addData方法，DiscussionAvatarListener(可以不加)为动画效果的监听
 
