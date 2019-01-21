@@ -67,4 +67,3 @@ Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener
 
 If my control helps you, please help click on the top right corner, thank you!</br>
 <font color="#FF0000">如果有帮助到大家希望点下右上角Star，谢谢！</font>
-<font face="黑体" color=red size=7>7号红色黑体</font>
