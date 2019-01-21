@@ -32,7 +32,7 @@ The method referenced in the project:</br>
 
 #### Step 3. Reference control in layout</br>
 步骤3. 布局中引用控件
-```
+```Java
     <com.discussionavatarview.DiscussionAvatarView
         android:id="@+id/daview"
         android:layout_width="wrap_content"
