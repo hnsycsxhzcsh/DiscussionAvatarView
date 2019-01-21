@@ -1,24 +1,19 @@
 # DiscussionAvatarView
-Android custom control _ discussion group round avatar overlay control DiscussionAvatarView, showing the avatar of multiple people participating in the discussion
-
+Android custom control _ discussion group round avatar overlay control DiscussionAvatarView, showing the avatar of multiple people participating in the discussion</br>
 Android自定义控件_讨论组圆形头像叠加控件DiscussionAvatarView，显示多个参与讨论的人的头像
 
 <a href="https://github.com/hnsycsxhzcsh/DiscussionAvatarView/blob/master/mysrc/discussionavatar.apk">Download Apk</a>
 
-Rendering
-
+Rendering</br>
 效果图
 
 <img src="https://github.com/hnsycsxhzcsh/DiscussionAvatarView/blob/master/mysrc/discussionavatar.gif" width="300" height="612">
 
-The method referenced in the project:
-
+The method referenced in the project:</br>
 项目中引用的方法：
 
-Step 1. Add the JitPack repository to your build file
-
-步骤1.将JitPack存储库添加到构建文件中
-
+Step 1. Add the JitPack repository to your build file</br>
+步骤1.将JitPack存储库添加到构建文件中</br>
 项目的根build.gradle中添加以下代码：
 
 	allprojects {
@@ -28,16 +23,14 @@ Step 1. Add the JitPack repository to your build file
 		}
 	}
 
-Step 2. Add the dependency
-
+Step 2. Add the dependency</br>
 步骤2.build.gradle添加依赖项
 
 	dependencies {
 	        implementation 'com.github.hnsycsxhzcsh:DiscussionAvatarView:1.1'
 	}
 
-Step 3. Reference control in layout
-
+Step 3. Reference control in layout</br>
 步骤3. 布局中引用控件
 
     <com.discussionavatarview.DiscussionAvatarView
@@ -51,8 +44,7 @@ Step 3. Reference control in layout
         app:radius="30"
         app:space="0.5">
 
-Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener (can be omitted) as an animation effect monitor.
-
+Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener (can be omitted) as an animation effect monitor.</br>
 步骤4. 新增头像使用addData方法，DiscussionAvatarListener(可以不加)为动画效果的监听
 
     mBtAdd.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +65,5 @@ Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener
             }
         });
 
-If my control helps you, please help click on the top right corner, thank you!
-
+If my control helps you, please help click on the top right corner, thank you!</br>
 <font color="#FF0000">如果有帮助到大家希望点下右上角Star，谢谢！</font>
