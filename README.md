@@ -46,7 +46,7 @@ The method referenced in the project:</br>
 ```
 #### Step 4. Add an avatar using the addData method, and the DiscussionAvatarListener (can be omitted) as an animation effect monitor.</br>
 步骤4. 新增头像使用addData方法，DiscussionAvatarListener(可以不加)为动画效果的监听
-```Java
+```
     mBtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
