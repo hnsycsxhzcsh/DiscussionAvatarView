@@ -26,9 +26,9 @@ The method referenced in the project:</br>
 ### Step 2. Add the dependency</br>
 步骤2.build.gradle添加依赖项
 ```Java
-	dependencies {
-	        implementation 'com.github.hnsycsxhzcsh:DiscussionAvatarView:v1.1'
-	}
+dependencies {
+	    implementation 'com.github.hnsycsxhzcsh:DiscussionAvatarView:v1.1'
+}
 ```
 ### Step 3. Reference control in layout</br>
 步骤3. 布局中引用控件
