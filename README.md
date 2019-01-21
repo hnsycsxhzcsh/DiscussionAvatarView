@@ -27,7 +27,7 @@ Step 2. Add the dependency</br>
 步骤2.build.gradle添加依赖项
 
 	dependencies {
-	        implementation 'com.github.hnsycsxhzcsh:DiscussionAvatarView:1.1'
+	        implementation 'com.github.hnsycsxhzcsh:DiscussionAvatarView:v1.1'
 	}
 
 Step 3. Reference control in layout</br>
