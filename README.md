@@ -1,6 +1,6 @@
 # DiscussionAvatarView
 Android custom control _ discussion group round avatar overlay control DiscussionAvatarView, showing the avatar of multiple people participating in the discussion</br>
-Android自定义控件_讨论组圆形头像叠加控件DiscussionAvatarView，显示多个参与讨论的人的头像
+Android自定义控件_讨论组圆形头像堆叠、叠加控件DiscussionAvatarView，显示多个参与讨论的人的头像
 
 <a href="https://github.com/hnsycsxhzcsh/DiscussionAvatarView/blob/master/mysrc/discussionavatar.apk">Download Apk</a>
 
