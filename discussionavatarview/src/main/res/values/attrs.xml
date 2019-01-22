@@ -12,7 +12,6 @@
         <attr name="isLastComplete" format="reference|boolean" />
         <!--是否显示动画效果-->
         <attr name="isShowAnimation" format="reference|boolean" />
-
     </declare-styleable>
 
 </resources>

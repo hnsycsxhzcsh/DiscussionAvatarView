@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -91,7 +90,7 @@ public class DiscussionAvatarView extends ViewGroup {
         int heiMeasure = MeasureSpec.getSize(heightMeasureSpec);
         int heiMode = MeasureSpec.getMode(heightMeasureSpec);
         int widMode = MeasureSpec.getMode(widthMeasureSpec);
-        int wieMeasure = MeasureSpec.getSize(heightMeasureSpec);
+        int widMeasure = MeasureSpec.getSize(heightMeasureSpec);
 
         int wid = 0;
         int hei = 0;
@@ -118,7 +117,8 @@ public class DiscussionAvatarView extends ViewGroup {
             }
             hei = Math.max(hei, childHeight);
         }
-        setMeasuredDimension((widMode == MeasureSpec.EXACTLY) ? wieMeasure : wid,
+        //如果是exactly使用测量宽和高，否则使用自己设置的宽和高
+        setMeasuredDimension((widMode == MeasureSpec.EXACTLY) ? widMeasure : wid,
                 (heiMode == MeasureSpec.EXACTLY) ? heiMeasure : hei);
     }
 
@@ -168,7 +168,6 @@ public class DiscussionAvatarView extends ViewGroup {
             } else {
                 GlideUtil.loadCircleImageView(mContext, list.get(size - i - 1), iv);
             }
-
             this.addView(iv);
         }
     }
