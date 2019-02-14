@@ -90,7 +90,7 @@ public class DiscussionAvatarView extends ViewGroup {
         int heiMeasure = MeasureSpec.getSize(heightMeasureSpec);
         int heiMode = MeasureSpec.getMode(heightMeasureSpec);
         int widMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widMeasure = MeasureSpec.getSize(heightMeasureSpec);
+        int widMeasure = MeasureSpec.getSize(widthMeasureSpec);
 
         int wid = 0;
         int hei = 0;
