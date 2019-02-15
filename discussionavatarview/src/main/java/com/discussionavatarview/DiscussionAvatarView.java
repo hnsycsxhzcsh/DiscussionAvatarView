@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ public class DiscussionAvatarView extends ViewGroup {
     /**
      * 是否最后一个显示完全
      */
-    private boolean isLastComplete;
+    private boolean mIsLastComplete;
     /**
      * 最大头像数目
      */
@@ -48,11 +49,13 @@ public class DiscussionAvatarView extends ViewGroup {
     /**
      * 是否显示动画效果
      */
-    private boolean isShowAnimation;
+    private boolean mIsShowAnimation;
     /**
      * 监听
      */
     private DiscussionAvatarListener listener;
+    private boolean mIsShowFrame;
+    private int mFrameColor;
 
     public DiscussionAvatarView(Context context) {
         this(context, null);
@@ -75,8 +78,10 @@ public class DiscussionAvatarView extends ViewGroup {
             int radius = array.getInteger(R.styleable.DiscussionAvatarView_radius, 13);
             mSpace = array.getFloat(R.styleable.DiscussionAvatarView_space, (float) 0.5);
             mMaxCount = array.getInteger(R.styleable.DiscussionAvatarView_maxCount, 6);
-            isLastComplete = array.getBoolean(R.styleable.DiscussionAvatarView_isLastComplete, true);
-            isShowAnimation = array.getBoolean(R.styleable.DiscussionAvatarView_isShowAnimation, true);
+            mIsLastComplete = array.getBoolean(R.styleable.DiscussionAvatarView_isLastComplete, true);
+            mIsShowAnimation = array.getBoolean(R.styleable.DiscussionAvatarView_isShowAnimation, true);
+            mIsShowFrame = array.getBoolean(R.styleable.DiscussionAvatarView_isShowFrame, true);
+            mFrameColor = array.getColor(R.styleable.DiscussionAvatarView_frameColor, Color.RED);
 
             mRadius = DensityUtil.dip2px(context, radius);
 
@@ -131,7 +136,7 @@ public class DiscussionAvatarView extends ViewGroup {
         int right = -mCurrentOffset;
         for (int i = 0; i < count; i++) {
             View child;
-            if (isLastComplete) {
+            if (mIsLastComplete) {
                 child = getChildAt(i);
             } else {
                 child = getChildAt(count - i - 1);
@@ -163,10 +168,10 @@ public class DiscussionAvatarView extends ViewGroup {
         mMaxCount = size;
         for (int i = 0; i < size; i++) {
             ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
-            if (isLastComplete) {
-                GlideUtil.loadCircleImageView(mContext, list.get(i), iv);
+            if (mIsLastComplete) {
+                GlideUtil.loadCircleImageView(mContext, list.get(i), iv, mIsShowFrame, mFrameColor);
             } else {
-                GlideUtil.loadCircleImageView(mContext, list.get(size - i - 1), iv);
+                GlideUtil.loadCircleImageView(mContext, list.get(size - i - 1), iv, mIsShowFrame, mFrameColor);
             }
             this.addView(iv);
         }
@@ -199,18 +204,18 @@ public class DiscussionAvatarView extends ViewGroup {
         }
         int childCount = getChildCount();
         final ImageView iv = (ImageView) mInflater.inflate(R.layout.avatar, this, false);
-        GlideUtil.loadCircleImageView(mContext, ava, iv);
-        if (isLastComplete) {
+        GlideUtil.loadCircleImageView(mContext, ava, iv, mIsShowFrame, mFrameColor);
+        if (mIsLastComplete) {
             this.addView(iv);
         } else {
             this.addView(iv, 0);
         }
 
         if (childCount >= mMaxCount) {
-            if (isShowAnimation) {
+            if (mIsShowAnimation) {
                 int countAft = getChildCount();
                 final View child;
-                if (isLastComplete) {
+                if (mIsLastComplete) {
                     child = getChildAt(0);
                 } else {
                     child = getChildAt(countAft - 1);
@@ -250,7 +255,7 @@ public class DiscussionAvatarView extends ViewGroup {
                             View child = getChildAt(i);
                             child.setAlpha(1);
                         }
-                        if (isLastComplete) {
+                        if (mIsLastComplete) {
                             removeViewAt(0);
                         } else {
                             removeViewAt(count - 1);
@@ -264,7 +269,7 @@ public class DiscussionAvatarView extends ViewGroup {
                 animator.start();
             } else {
                 mCurrentOffset = 0;
-                if (isLastComplete) {
+                if (mIsLastComplete) {
                     removeViewAt(0);
                 } else {
                     int count = getChildCount();
@@ -284,7 +289,7 @@ public class DiscussionAvatarView extends ViewGroup {
         int childCount = getChildCount();
         if (childCount > mMaxCount) {
             for (int i = 0; i < childCount - mMaxCount; i++) {
-                if (isLastComplete) {
+                if (mIsLastComplete) {
                     removeViewAt(0);
                 } else {
                     int currentCount = getChildCount();
