@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         mBtAdd2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://b-ssl.duitang.com/uploads/item/201811/01/20181101093301_u2NKu.thumb.700_0.jpeg";
+//                String url = "https://b-ssl.duitang.com/uploads/item/201811/01/20181101093301_u2NKu.thumb.700_0.jpeg";
+                String url = "https://b-ssl.duitang.com/uploads/item/201902/10/20190210103053_fQA8f.thumb.700_0.jpeg";
                 mDiscussAva.addData(url);
             }
         });

@@ -16,7 +16,7 @@
         app:isShowAnimation="true"
         app:isShowFrame="true"
         app:maxCount="6"
-        app:radius="30"
+        app:radius="10"
         app:space="0.5"></com.discussionavatarview.DiscussionAvatarView>
 
     <LinearLayout

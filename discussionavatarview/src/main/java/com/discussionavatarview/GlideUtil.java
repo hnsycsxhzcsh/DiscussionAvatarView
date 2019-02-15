@@ -2,7 +2,6 @@ package com.discussionavatarview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.widget.ImageView;
 
@@ -22,37 +21,37 @@ public class GlideUtil {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     if (!((Activity) context).isDestroyed()) {
                         if (isShowFrame) {
-                            Glide.with(context).load(url).
-                                    diskCacheStrategy(DiskCacheStrategy.ALL).
-                                    transform(new GlideCircleTransformWithBorder(context, 2, color)).
-                                    into(iv);
+                            loadCircleBorder(context, url, iv, color);
                         } else {
-                            Glide.with(context).load(url).transform(new GlideCircleTransform(context)).
-                                    diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+                            loadCircle(context, url, iv);
                         }
                     }
                 } else {
                     if (isShowFrame) {
-                        Glide.with(context).load(url).
-                                diskCacheStrategy(DiskCacheStrategy.ALL).
-                                transform(new GlideCircleTransformWithBorder(context, 2, color)).
-                                into(iv);
+                        loadCircleBorder(context, url, iv, color);
                     } else {
-                        Glide.with(context).load(url).transform(new GlideCircleTransform(context)).
-                                diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+                        loadCircle(context, url, iv);
                     }
                 }
             } else {
                 if (isShowFrame) {
-                    Glide.with(context).load(url).
-                            diskCacheStrategy(DiskCacheStrategy.ALL).
-                            transform(new GlideCircleTransformWithBorder(context, 2, color)).
-                            into(iv);
+                    loadCircleBorder(context, url, iv, color);
                 } else {
-                    Glide.with(context).load(url).transform(new GlideCircleTransform(context)).
-                            diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+                    loadCircle(context, url, iv);
                 }
             }
         }
+    }
+
+    private static void loadCircle(Context context, String url, ImageView iv) {
+        Glide.with(context).load(url).transform(new GlideCircleTransform(context)).
+                diskCacheStrategy(DiskCacheStrategy.SOURCE).into(iv);
+    }
+
+    private static void loadCircleBorder(Context context, String url, ImageView iv, int color) {
+        Glide.with(context).load(url).
+                diskCacheStrategy(DiskCacheStrategy.SOURCE).
+                transform(new GlideCircleTransformWithBorder(context, 2, color)).
+                into(iv);
     }
 }
