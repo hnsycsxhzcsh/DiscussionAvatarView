@@ -14,9 +14,9 @@
         android:layout_gravity="center_horizontal"
         app:isLastComplete="true"
         app:isShowAnimation="true"
-        app:isShowFrame="true"
+        app:isShowFrame="false"
         app:maxCount="6"
-        app:radius="10"
+        app:radius="20"
         app:space="0.5"></com.discussionavatarview.DiscussionAvatarView>
 
     <LinearLayout

@@ -45,7 +45,7 @@ public class GlideCircleTransformWithBorder extends BitmapTransformation {
     private Bitmap circleCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
 
-        int size = (int) (Math.min(source.getWidth(), source.getHeight()));
+        int size = (int) (Math.min(source.getWidth(), source.getHeight()) - (mBorderWidth) / 2);
         int x = (source.getWidth() - size) / 2;
         int y = (source.getHeight() - size) / 2;
         // TODO this could be acquired from the pool too

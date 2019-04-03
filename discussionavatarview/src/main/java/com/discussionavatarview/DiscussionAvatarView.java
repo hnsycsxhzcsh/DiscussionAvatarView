@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
 
@@ -152,6 +153,7 @@ public class DiscussionAvatarView extends ViewGroup {
             child.layout(left, top, right, childHeight);
             left = (int) (left + childWidth * mSpace);
         }
+
     }
 
     /**
